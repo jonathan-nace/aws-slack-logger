@@ -1,3 +1,4 @@
 [submodule "botman-slack-logger"]
 	path = botman-slack-logger
 	url = https://github.com/joonaskaskisola/botman-slack-logger
+	branch = master
