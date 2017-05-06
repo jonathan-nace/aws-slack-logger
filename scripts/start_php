@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd /opt/slack-logger/
+source ./scripts/insert_configs
+php ./app.php

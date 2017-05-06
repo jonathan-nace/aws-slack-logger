@@ -1,0 +1,29 @@
+#!/bin/bash
+
+case "$1" in
+start)
+   screen -dmS slack-logger /opt/slack-logger/scripts/start_php &
+   echo $!>/var/run/slacklogger.pid
+   ;;
+stop)
+   kill `cat /var/run/slacklogger.pid`
+   rm /var/run/slacklogger.pid
+   ;;
+restart)
+   $0 stop
+   $0 start
+   ;;
+status)
+   if [ -e /var/run/slacklogger.pid ]; then
+      echo slacklogger is running, pid=`cat /var/run/slacklogger.pid`
+   else
+      echo slacklogger is NOT running
+      exit 1
+   fi
+   ;;
+*)
+   echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0
+

@@ -1,0 +1,20 @@
+{
+   "builders" : [
+      {
+         "type" : "amazon-ebs",
+         "name" : "aws-php71 new",
+         "ami_name" : "php7.1 new",
+         "region" : "eu-west-1",
+         "ssh_timeout" : "10m",
+         "instance_type" : "t2.micro",
+         "ssh_username" : "ubuntu",
+         "source_ami" : "ami-b4a79dd2"
+      }
+   ],
+   "provisioners" : [
+      {
+         "script" : "./provision.sh",
+         "type" : "shell"
+      }
+   ]
+}

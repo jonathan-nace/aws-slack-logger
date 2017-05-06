@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sudo apt-get install -y wget ruby awscli
+cd /tmp
+wget https://aws-codedeploy-eu-west-1.s3.amazonaws.com/latest/install -O install.sh
+chmod +x install.sh
+sudo ./install.sh auto
+sudo service codedeploy-agent status
+sudo service codedeploy-agent start
+rm install.sh
