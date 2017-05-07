@@ -3,10 +3,13 @@
 case "$1" in
 start)
    screen -dmS slack-logger /opt/slack-logger/scripts/start_php &
-   echo $!>/var/run/slacklogger.pid
+   echo '1' > /var/run/slacklogger.pid
    ;;
 stop)
-   kill `cat /var/run/slacklogger.pid`
+   for pid in `screen -ls | awk '/\.slack-logger\t/ {print strtonum($1)}'`; do
+      kill $pid
+   done
+
    rm /var/run/slacklogger.pid
    ;;
 restart)
