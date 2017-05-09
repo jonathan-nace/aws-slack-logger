@@ -1,4 +1,4 @@
 # m h  dom mon dow   command
 
 0 * * * *	/usr/bin/aws s3 cp --recursive /var/log/slack/ s3://slack-logger/logs/
-0 0 * * *	find /var/log/slack/ -type f -mtime +5 -exec rm {} \;
+0 0 * * *	find /var/log/slack/ -type f -mtime +2 -exec rm {} \;

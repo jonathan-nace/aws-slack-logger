@@ -12,4 +12,3 @@ sudo ./install.sh auto
 sudo service codedeploy-agent status
 sudo service codedeploy-agent start
 rm install.sh
-
