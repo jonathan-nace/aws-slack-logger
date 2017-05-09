@@ -1,0 +1,72 @@
+Parameters:
+  KeyName:
+    Description: The EC2 Key Pair to allow SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+
+Resources:
+  SlackLoggerBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: 'slack-logger'
+  SlackLoggerApp:
+    Type: AWS::CodeDeploy::Application
+  SlackLoggerDeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    DependsOn:
+      - SlackLoggerApp
+      - SlackLoggerBucket
+    Properties:
+      ApplicationName:
+        Ref: SlackLoggerApp
+      Deployment:
+        Description: 'First time'
+        IgnoreApplicationStopFailures: 'true'
+        Revision:
+          RevisionType: 'S3'
+          S3Location:
+            Bucket:
+              Ref: SlackLoggerBucket
+            BundleType: 'Zip'
+            Key: 'SlackLogger'
+      Ec2TagFilters:
+        -
+          Key: 'Name'
+          Value: 'slack-logger'
+          Type: 'KEY_AND_VALUE'
+  SlackLoggerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
+  SlackLoggerLaunchConfiguration:
+    DependsOn: SlackLoggerSecurityGroup
+    Type: "AWS::AutoScaling::LaunchConfiguration"
+    Properties:
+      EbsOptimized: False
+      IamInstanceProfile: String
+      ImageId: 'ami-myami'
+      InstanceMonitoring: False
+      InstanceType: 't2.nano'
+      KeyName:
+        Ref: "KeyName"
+      SecurityGroups:
+        - Ref: "SlackLoggerSecurityGroup"
+  SlackLoggerAutoScalingGroup:
+    DependsOn: SlackLoggerLaunchConfiguration
+    Type: "AWS::AutoScaling::AutoScalingGroup"
+    Properties:
+      AvailabilityZones:
+        - String
+      Cooldown: '300'
+      LaunchConfigurationName:
+        Ref: SlackLoggerLaunchConfiguration
+      MaxSize: '1'
+      MinSize: '1'
+      Tags:
+        - Key: 'Name'
+          Value: 'slack-logger'
+          PropagateAtLaunch: True
