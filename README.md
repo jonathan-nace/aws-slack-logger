@@ -30,13 +30,12 @@ cd botman-slack-logger/
 
 ## Configuring
 ```bash
-cp scripts/insert_configs-example scripts/insert_configs
+mv scripts/insert_configs-example scripts/insert_configs
 ```
-Edit `SLACK_API_KEY` in scripts/insert_configs
+Edit `SLACK_API_KEY` & `LOG_DIR` in scripts/insert_configs
 
 
 ## Packaging
 ```bash
 tar -czvf /tmp/builds/SlackApp.tar.gz .
 ```
-
