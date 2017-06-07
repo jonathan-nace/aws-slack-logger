@@ -2,3 +2,4 @@
 
 export SLACK_API_KEY="xoxp-123456789-123456789-123456789-blabla"
 export LOG_DIR="/var/log/slack/"
+export S3_BUCKET="my-s3-bucket-for-slacklogger"
