@@ -1,7 +1,6 @@
 # m h  dom mon dow   command
 
-*/5 * * *	if [ -z $(/bin/pidof php) ]; then service slacklogger restart; fi
+*/5 * * * *	if [ -z $(/bin/pidof php) ]; then /usr/sbin/service slacklogger restart; fi
 0 * * * *	/opt/slack-logger/scripts/copy-logs-to-s3.sh
 0 * * * *	/usr/bin/aws s3 cp --recursive /var/log/slack/ s3://slack-logger/logs/
-0 0 * * *	find /var/log/slack/ -type f -mtime +2 -exec rm {} \;
-
+0 0 * * *	/usr/bin/find /var/log/slack/ -type f -mtime +2 -exec rm {} \;
