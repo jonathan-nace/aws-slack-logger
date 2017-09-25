@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if [ -z $(/bin/pidof php) ]; then
+	/usr/sbin/service slacklogger restart
+fi

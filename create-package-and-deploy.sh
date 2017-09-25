@@ -9,7 +9,7 @@ PACKAGE=$(echo "${APPNAME}-${DATE}-${TIME}.tar.gz");
 source ./scripts/insert_configs
 
 mkdir -p ../builds/
-tar -czvf ../builds/$PACKAGE .
+tar -czvf ../builds/$PACKAGE . --exclude '.git/*'
 aws s3 cp ../builds/$PACKAGE s3://$S3_BUCKET/builds/
 
 aws deploy create-deployment \
