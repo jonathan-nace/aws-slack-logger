@@ -19,6 +19,6 @@ hooks:
       timeout: 120
       runas: root
   AfterInstall:
-    - location: scripts/install_crontab
+    - location: scripts/install_app
       timeout: 120
       runas: root

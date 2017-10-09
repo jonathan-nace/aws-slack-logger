@@ -1,5 +1,4 @@
 # m h  dom mon dow   command
 
-* * * * *	/opt/slack-logger/scripts/restart_service_check
 0 * * * *	/usr/bin/aws s3 cp --recursive /var/log/slack/ s3://slack-logger/logs/
 0 0 * * *	/usr/bin/find /var/log/slack/ -type f -mtime +2 -exec rm {} \;

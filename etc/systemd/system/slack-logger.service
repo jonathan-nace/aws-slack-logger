@@ -1,0 +1,8 @@
+[Unit]
+Description=slack-logger
+
+[Service]
+ExecStart=/opt/slack-logger/scripts/start_php
+
+[Install]
+WantedBy=multi-user.target
