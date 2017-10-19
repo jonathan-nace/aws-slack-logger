@@ -3,6 +3,8 @@ Description=slack-logger
 
 [Service]
 ExecStart=/opt/slack-logger/scripts/start_php
+RestartSec=1
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
