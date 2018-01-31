@@ -3,11 +3,27 @@ Parameters:
     Description: The EC2 Key Pair to allow SSH access to the instance
     Type: AWS::EC2::KeyPair::KeyName
 
+Parameters:
+  S3BucketName:
+    Type: String
+    Default: 'slack-logger'
+  SSHKeyName:
+    Type: String
+    Default: 'ec2-user@example.com'
+  SlackLoggerAMI:
+    Type: String
+    Default: 'ami-123456'
+  ASGMin:
+    Type: Number
+    Default: 1
+  ASGMax:
+    Type: Number
+    Default: 10
 Resources:
   SlackLoggerBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: 'slack-logger'
+      BucketName: !Ref S3BucketName
   SlackLoggerApp:
     Type: AWS::CodeDeploy::Application
   SlackLoggerDeploymentGroup:
@@ -19,14 +35,14 @@ Resources:
       ApplicationName:
         Ref: SlackLoggerApp
       Deployment:
-        Description: 'First time'
+        Description: 'Slack logger deployment group'
         IgnoreApplicationStopFailures: 'true'
         Revision:
           RevisionType: 'S3'
           S3Location:
             Bucket:
               Ref: SlackLoggerBucket
-            BundleType: 'Zip'
+            BundleType: 'Tgz'
             Key: 'SlackLogger'
       Ec2TagFilters:
         -
@@ -48,24 +64,23 @@ Resources:
     Properties:
       EbsOptimized: False
       IamInstanceProfile: String
-      ImageId: 'ami-myami'
+      ImageId: !Ref SlackLoggerAMI
       InstanceMonitoring: False
       InstanceType: 't2.nano'
-      KeyName:
-        Ref: "KeyName"
+      KeyName: !Ref SSHKeyName
       SecurityGroups:
-        - Ref: "SlackLoggerSecurityGroup"
+        - Ref: 'SlackLoggerSecurityGroup'
   SlackLoggerAutoScalingGroup:
     DependsOn: SlackLoggerLaunchConfiguration
-    Type: "AWS::AutoScaling::AutoScalingGroup"
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
     Properties:
       AvailabilityZones:
         - String
       Cooldown: '300'
       LaunchConfigurationName:
         Ref: SlackLoggerLaunchConfiguration
-      MaxSize: '1'
-      MinSize: '1'
+      MaxSize: !Ref ASGMin
+      MinSize: !Ref ASGMax
       Tags:
         - Key: 'Name'
           Value: 'slack-logger'
